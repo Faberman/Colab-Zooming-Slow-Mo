@@ -6,13 +6,12 @@ import logging
 import numpy as np
 import cv2
 import torch
-
+import time
 import utils.util as util
 import data.util as data_util
 import models.modules.Sakuya_arch as Sakuya_arch
-
 import argparse
-from shutil import rmtree
+import shutil
 
 # For parsing commandline arguments
 parser = argparse.ArgumentParser()
@@ -44,6 +43,22 @@ def check():
     return error
 
 def main():
+    counter = 0
+    time_values = []
+    temp_count = 0
+    # Deleting old files, if they exist
+    file_extention = os.path.splitext(args.video)[1]
+    if os.path.exists("/content/input{file_extention}"):
+        os.remove("/content/input{file_extention}")
+    if os.path.exists("/content/output-audio.aac"):
+      os.remove("/content/output-audio.aac")
+
+    if os.path.exists("/content/Zooming-Slow-Mo-CVPR-2020/extract"):
+      shutil.rmtree("/content/Zooming-Slow-Mo-CVPR-2020/extract")
+    if os.path.exists("/content/Zooming-Slow-Mo-CVPR-2020/tmp"):
+      shutil.rmtree("/content/Zooming-Slow-Mo-CVPR-2020/tmp")
+
+
     scale = 4
     N_ot = args.N_out
     N_in = 1 + N_ot//2
@@ -54,8 +69,8 @@ def main():
     model = Sakuya_arch.LunaTokis(64, N_ot, 8, 5, 40)
 
     #### extract the input video to temporary folder
-    save_folder = osp.join(osp.dirname(args.output), '.delme')
-    save_out_folder = osp.join(osp.dirname(args.output), '.hr_delme')
+    save_folder = "/content/Zooming-Slow-Mo-CVPR-2020/extract"
+    save_out_folder = "/content/Zooming-Slow-Mo-CVPR-2020/tmp"
     util.mkdirs(save_folder)
     util.mkdirs(save_out_folder)
     error = util.extract_frames(args.ffmpeg_dir, args.video, save_folder)
@@ -96,7 +111,17 @@ def main():
     #### zsm images
     imgs = util.read_seq_imgs(save_folder)
     select_idx_list = util.test_index_generation(False, N_ot, len(imgs))
+
+    rootdir = '/content/Zooming-Slow-Mo-CVPR-2020/extract'
+    files = glob.glob(rootdir + '/**/*.png', recursive=True)
+
+    final_amount_images = np.amax(np.amax(select_idx_list))
+
+    previous = 0
+  	
     for select_idxs in select_idx_list:
+  
+        start = time.time()
         # get input images
         select_idx = select_idxs[0]
         imgs_in = imgs.index_select(0, torch.LongTensor(select_idx)).unsqueeze(0).to(device)
@@ -110,14 +135,16 @@ def main():
                 output = util.tensor2img(output_f)
                 cv2.imwrite(osp.join(save_out_folder, '{:06d}.png'.format(name_idx)), output)
 
-    # now turn output images to video
-    # generate mp4
-    util.create_video(args.ffmpeg_dir, save_out_folder, args.output, args.fps)
+                if (name_idx - previous)  != 0:
+                    previous = name_idx
+                    end = time.time()
+                    final_time = end - start
+                    time_values.append(final_time)
+                    counter += 1
+                    print('Image %d out of %d' %(counter,final_amount_images))
 
-    # remove tmp folder    
-    rmtree(save_folder)
-    rmtree(save_out_folder)
-    
+                    print(f"********** Time per frame (avg): %f s Time left: %d s **********" % ( (sum(time_values) / len(time_values)), (sum(time_values) / len(time_values)*(final_amount_images-counter))))
+
     exit(0)
 
 if __name__ == '__main__':

@@ -53,10 +53,10 @@ def main():
     if os.path.exists("/content/output-audio.aac"):
       os.remove("/content/output-audio.aac")
 
-    if os.path.exists("/content/Zooming-Slow-Mo-CVPR-2020/extract"):
-      shutil.rmtree("/content/Zooming-Slow-Mo-CVPR-2020/extract")
-    if os.path.exists("/content/Zooming-Slow-Mo-CVPR-2020/tmp"):
-      shutil.rmtree("/content/Zooming-Slow-Mo-CVPR-2020/tmp")
+    if os.path.exists("/content/Colab-Zooming-Slow-Mo/extract"):
+      shutil.rmtree("/content/Colab-Zooming-Slow-Mo/extract")
+    if os.path.exists("/content/Colab-Zooming-Slow-Mo/tmp"):
+      shutil.rmtree("/content/Colab-Zooming-Slow-Mo/tmp")
 
 
     scale = 4
@@ -69,8 +69,8 @@ def main():
     model = Sakuya_arch.LunaTokis(64, N_ot, 8, 5, 40)
 
     #### extract the input video to temporary folder
-    save_folder = "/content/Zooming-Slow-Mo-CVPR-2020/extract"
-    save_out_folder = "/content/Zooming-Slow-Mo-CVPR-2020/tmp"
+    save_folder = "/content/Colab-Zooming-Slow-Mo/extract"
+    save_out_folder = "/content/Colab-Zooming-Slow-Mo/tmp"
     util.mkdirs(save_folder)
     util.mkdirs(save_out_folder)
     error = util.extract_frames(args.ffmpeg_dir, args.video, save_folder)
@@ -112,7 +112,7 @@ def main():
     imgs = util.read_seq_imgs(save_folder)
     select_idx_list = util.test_index_generation(False, N_ot, len(imgs))
 
-    rootdir = '/content/Zooming-Slow-Mo-CVPR-2020/extract'
+    rootdir = '/content/Colab-Zooming-Slow-Mo/extract'
     files = glob.glob(rootdir + '/**/*.png', recursive=True)
 
     final_amount_images = np.amax(np.amax(select_idx_list))

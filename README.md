@@ -4,11 +4,11 @@ By [Xiaoyu Xiang<sup>*</sup>](https://engineering.purdue.edu/people/xiaoyu.xiang
 
 This is a Google Colab Notebook for the official Pytorch implementation of *Zooming Slow-Mo: Fast and Accurate One-Stage Space-Time Video Super-Resolution*. 
 
-## Simply download `Colab-Zooming-Slow-Mo.ipynb` and open it inside your Google Drive or click [here](https://colab.research.google.com/drive/1KmVSRK3uHAy6OwGS1Dd2PiQ8i40FDa3G?usp=sharing) and copy the file with "File > Save a copy to Drive..." into your Google Drive. 
+## Simply download `Colab-Zooming-Slow-Mo.ipynb` and open it inside your Google Drive or click [here](https://colab.research.google.com/github/styler00dollar/Colab-Zooming-Slow-Mo/blob/master/Colab-Zooming-Slow-Mo.ipynb) and copy the file with "File > Save a copy to Drive..." into your Google Drive. 
 
 ## Important information
 
-- If you can't open `Colab-Zooming-Slow-Mo.ipynb` inside your Google Drive, try this [colab link](https://colab.research.google.com/drive/1KmVSRK3uHAy6OwGS1Dd2PiQ8i40FDa3G?usp=sharing) and save it to your Google Drive. The "open in Colab"-button can be missing in Google Drive, if that person never used Colab.
+- If you can't open `Colab-Zooming-Slow-Mo.ipynb` inside your Google Drive, try this [colab link](https://colab.research.google.com/github/styler00dollar/Colab-Zooming-Slow-Mo/blob/master/Colab-Zooming-Slow-Mo.ipynb) and save it to your Google Drive. The "open in Colab"-button can be missing in Google Drive, if that person never used Colab.
 - Google Colab does assign a random GPU. It depends on luck.
 - The Google Colab VM does have a maximum session length of 12 hours. Additionally there is a 30 minute timeout if you leave colab. The VM will be deleted after these timeouts.
 
